@@ -2,6 +2,7 @@ package main;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,18 +56,22 @@ public class Document {
 
     private String normalizeText(String content) {
         return content.replaceAll("[^A-Za-z0-9 ]", "");
-
         //TODO remove non-alphanumeric signs, keep only letters, digits and spaces.
     }
 
     private List<String> tokenizeDocument(String normalized) {
         return Arrays.asList(normalized.split("\\s+"));
-
         //TODO: tokenize document - use simple division on white spaces.
     }
 
     private Map<String, Double> calculateBagOfWords(List<String> terms, Dictionary dictionary) {
-        return new HashMap<>();
+        Map<String, Double> bagOfWords = new HashMap<>();
+        for (String term : dictionary.getTerms()) {
+            int occurrences = Collections.frequency(terms, term);
+            bagOfWords.put(term, (double) occurrences);
+        }
+
+        return bagOfWords;
         //TODO: calculate bag-of-words representation - count how many times each term from dictionary.getTerms
         // exists in document
     }

@@ -6,10 +6,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class SearchEngine {
-    private static String DOCUMENTS_PATH = "documents.txt";
-//    private static String DOCUMENTS_PATH = "documents_lab3.txt";
-    private static String KEYWORDS_PATH = "keywords.txt";
-//    private static String KEYWORDS_PATH = "keywords_lab3.txt";
+//    private static String DOCUMENTS_PATH = "documents.txt";
+    private static String DOCUMENTS_PATH = "documents_lab3.txt";
+//    private static String KEYWORDS_PATH = "keywords.txt";
+    private static String KEYWORDS_PATH = "keywords_lab3.txt";
     private static int MAX_PRINT_RESULTS = 10;
     private List<Document> _documents;
     private Dictionary _dictionary;
