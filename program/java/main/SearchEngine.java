@@ -27,8 +27,10 @@ public class SearchEngine {
         _documents.forEach(item -> item.calculateRepresentations(_dictionary));
 
         Scanner scanner = new Scanner(System.in);
-        while (true) {
-            String query = scanner.nextLine();
+        int ii = 0;
+        while (ii < 1) {
+//            String query = scanner.nextLine();
+            String query = "information retrieval";
             if ("q".equals(query))
                 break;
             Document queryDocument = new Document(query, "query");
@@ -43,6 +45,7 @@ public class SearchEngine {
                 Map.Entry<Document, Double> entry = sortedSimilarities.get(i);
                 System.out.println(entry.getKey().getTitle() + " " + entry.getValue());
             }
+            ii++;
         }
     }
 

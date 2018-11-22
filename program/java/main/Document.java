@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -77,17 +78,53 @@ public class Document {
     }
 
     private Map<String, Double> calculateTfs(Map<String, Double> bagOfWords) {
-        return new HashMap<>();
+        Map<String, Double> map = new HashMap<>();
+        Map.Entry<String, Double> entry = null;
+
+        for (Map.Entry<String, Double> ent : bagOfWords.entrySet())
+            if (entry == null || ent.getValue().compareTo(entry.getValue()) > 0) {
+                entry = ent;
+            }
+
+        for (Map.Entry<String, Double> ent : bagOfWords.entrySet())
+            map.put(ent.getKey(), ent.getValue() / entry.getValue());
+
+        return map;
         //TODO: calculate TF representation - divide elements from bag-of-words by maximal value from this vector
     }
 
     private List<Double> calculateTfIds(Map<String, Double> tfs, Dictionary dictionary) {
+        List<Double> list = new ArrayList<>();
+
+        for (Iterator<Map.Entry<String, Double>> iterator = dictionary.getIdfs().entrySet().iterator(); iterator.hasNext(); ) {
+            Map.Entry<String, Double> entry = iterator.next();
+            String k = entry.getKey();
+            Double v = entry.getValue();
+            double result = v * tfs.get(k);
+            list.add(result);
+        }
+
         //TODO: calculate TF-IDF representation - multiply elements from tf representation my matching IDFs (dictionary.getIfs())
         //return results as list of tf-IDF values for terms in the same order as dictionary.getTerms()
-        return new ArrayList<>();
+        return list;
     }
 
-    public double calculateSimilarity(Document query) {
-        return 0; //TODO: calculate cosine similarity between current document and query document (use calculated TF_IDFs)
+    double calculateSimilarity(Document query) {
+        double wektor = 0.0;
+        double doc = 0.0;
+        double document = 0.0;
+        double q;
+        double d;
+
+        for (int i = 0; i < query._tfIdfs.size(); i++) {
+            q = query._tfIdfs.get(i);
+            d = this._tfIdfs.get(i);
+            wektor += Math.sqrt(q * q);
+            document += Math.sqrt(d * d);
+            doc += d * q;
+        }
+
+        return doc / (wektor * document);
+        //TODO: calculate cosine similarity between current document and query document (use calculated TF_IDFs)
     }
 }
