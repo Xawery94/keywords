@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -81,13 +80,20 @@ public class Document {
         Map<String, Double> map = new HashMap<>();
         Map.Entry<String, Double> entry = null;
 
-        for (Map.Entry<String, Double> ent : bagOfWords.entrySet())
+        for (Map.Entry<String, Double> ent : bagOfWords.entrySet()) {
             if (entry == null || ent.getValue().compareTo(entry.getValue()) > 0) {
                 entry = ent;
             }
+        }
 
-        for (Map.Entry<String, Double> ent : bagOfWords.entrySet())
-            map.put(ent.getKey(), ent.getValue() / entry.getValue());
+        for (Map.Entry<String, Double> ent : bagOfWords.entrySet()) {
+            if (Double.isNaN(ent.getValue() / entry.getValue())) {
+                double value = 0.0;
+                map.put(ent.getKey(), value);
+            } else {
+                map.put(ent.getKey(), ent.getValue() / entry.getValue());
+            }
+        }
 
         return map;
         //TODO: calculate TF representation - divide elements from bag-of-words by maximal value from this vector
@@ -96,12 +102,16 @@ public class Document {
     private List<Double> calculateTfIds(Map<String, Double> tfs, Dictionary dictionary) {
         List<Double> list = new ArrayList<>();
 
-        for (Iterator<Map.Entry<String, Double>> iterator = dictionary.getIdfs().entrySet().iterator(); iterator.hasNext(); ) {
-            Map.Entry<String, Double> entry = iterator.next();
+        for (Map.Entry<String, Double> entry : dictionary.getIdfs().entrySet()) {
             String k = entry.getKey();
             Double v = entry.getValue();
             double result = v * tfs.get(k);
-            list.add(result);
+
+            if (Double.isNaN(result)) {
+                list.add(0.0);
+            } else {
+                list.add(result);
+            }
         }
 
         //TODO: calculate TF-IDF representation - multiply elements from tf representation my matching IDFs (dictionary.getIfs())
@@ -124,7 +134,13 @@ public class Document {
             doc += d * q;
         }
 
-        return doc / (wektor * document);
+        double wynik = doc / (wektor * document);
+
+        if (Double.isNaN(wynik)) {
+            return 0.0;
+        } else {
+            return wynik;
+        }
         //TODO: calculate cosine similarity between current document and query document (use calculated TF_IDFs)
     }
 }

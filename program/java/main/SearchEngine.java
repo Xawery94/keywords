@@ -2,14 +2,19 @@ package main;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class SearchEngine {
-//    private static String DOCUMENTS_PATH = "documents.txt";
-    private static String DOCUMENTS_PATH = "documents_lab3.txt";
-//    private static String KEYWORDS_PATH = "keywords.txt";
-    private static String KEYWORDS_PATH = "keywords_lab3.txt";
+    private static String DOCUMENTS_PATH = "documents.txt";
+    //    private static String DOCUMENTS_PATH = "documents_lab3.txt";
+    private static String KEYWORDS_PATH = "keywords.txt";
+    //    private static String KEYWORDS_PATH = "keywords_lab3.txt";
     private static int MAX_PRINT_RESULTS = 10;
     private List<Document> _documents;
     private Dictionary _dictionary;
@@ -27,10 +32,8 @@ public class SearchEngine {
         _documents.forEach(item -> item.calculateRepresentations(_dictionary));
 
         Scanner scanner = new Scanner(System.in);
-        int ii = 0;
-        while (ii < 1) {
-//            String query = scanner.nextLine();
-            String query = "information retrieval";
+        while (true) {
+            String query = scanner.nextLine();
             if ("q".equals(query))
                 break;
             Document queryDocument = new Document(query, "query");
@@ -45,7 +48,6 @@ public class SearchEngine {
                 Map.Entry<Document, Double> entry = sortedSimilarities.get(i);
                 System.out.println(entry.getKey().getTitle() + " " + entry.getValue());
             }
-            ii++;
         }
     }
 
