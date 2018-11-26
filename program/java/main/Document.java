@@ -110,7 +110,11 @@ public class Document {
             Double v = entry.getValue();
             double result = v * tfs.get(k);
 
-            list.add(Double.isNaN(result) ? 0.0 : result);
+            if (Double.isNaN(result)) {
+                list.add(0.0);
+            } else {
+                list.add(result);
+            }
         }
 
         //TODO: calculate TF-IDF representation - multiply elements from tf representation my matching IDFs (dictionary.getIfs())
@@ -137,7 +141,11 @@ public class Document {
 
         double similarity = doc / (Math.sqrt(vector) * Math.sqrt(document));
 
-        return Double.isNaN(similarity) ? 0.0 : similarity;
+        if (Double.isNaN(similarity)) {
+            return 0.0;
+        } else {
+            return similarity;
+        }
         //TODO: calculate cosine similarity between current document and query document (use calculated TF_IDFs)
     }
 }
