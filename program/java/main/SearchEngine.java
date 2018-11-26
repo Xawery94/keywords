@@ -31,6 +31,7 @@ public class SearchEngine {
         _dictionary.calculateIdfs(_documents);
         _documents.forEach(item -> item.calculateRepresentations(_dictionary));
 
+        System.out.println("Put some query to search:");
         Scanner scanner = new Scanner(System.in);
         while (true) {
             String query = scanner.nextLine();

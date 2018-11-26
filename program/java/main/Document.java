@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -66,7 +67,8 @@ public class Document {
 
     private Map<String, Double> calculateBagOfWords(List<String> terms, Dictionary dictionary) {
         Map<String, Double> bagOfWords = new HashMap<>();
-        for (String term : dictionary.getTerms()) {
+        for (Iterator<String> iterator = dictionary.getTerms().iterator(); iterator.hasNext(); ) {
+            String term = iterator.next();
             int occurrences = Collections.frequency(terms, term);
             bagOfWords.put(term, (double) occurrences);
         }
@@ -102,16 +104,13 @@ public class Document {
     private List<Double> calculateTfIds(Map<String, Double> tfs, Dictionary dictionary) {
         List<Double> list = new ArrayList<>();
 
-        for (Map.Entry<String, Double> entry : dictionary.getIdfs().entrySet()) {
+        for (Iterator<Map.Entry<String, Double>> iterator = dictionary.getIdfs().entrySet().iterator(); iterator.hasNext(); ) {
+            Map.Entry<String, Double> entry = iterator.next();
             String k = entry.getKey();
             Double v = entry.getValue();
             double result = v * tfs.get(k);
 
-            if (Double.isNaN(result)) {
-                list.add(0.0);
-            } else {
-                list.add(result);
-            }
+            list.add(Double.isNaN(result) ? 0.0 : result);
         }
 
         //TODO: calculate TF-IDF representation - multiply elements from tf representation my matching IDFs (dictionary.getIfs())
@@ -120,27 +119,25 @@ public class Document {
     }
 
     double calculateSimilarity(Document query) {
-        double wektor = 0.0;
+        double vector = 0.0;
         double doc = 0.0;
         double document = 0.0;
         double q;
         double d;
 
-        for (int i = 0; i < query._tfIdfs.size(); i++) {
+        int i = 0;
+        while (i < query._tfIdfs.size()) {
             q = query._tfIdfs.get(i);
             d = this._tfIdfs.get(i);
-            wektor += Math.sqrt(q * q);
-            document += Math.sqrt(d * d);
+            vector += Math.pow(q, 2);
+            document += Math.pow(d, 2);
             doc += d * q;
+            i++;
         }
 
-        double wynik = doc / (wektor * document);
+        double similarity = doc / (Math.sqrt(vector) * Math.sqrt(document));
 
-        if (Double.isNaN(wynik)) {
-            return 0.0;
-        } else {
-            return wynik;
-        }
+        return Double.isNaN(similarity) ? 0.0 : similarity;
         //TODO: calculate cosine similarity between current document and query document (use calculated TF_IDFs)
     }
 }
