@@ -56,7 +56,7 @@ public class Document {
     }
 
     private String normalizeText(String content) {
-        return content.replaceAll("[^A-Za-z0-9 ]", "");
+        return content.replaceAll("[^A-Za-z0-9 ]", "").toLowerCase();
         //TODO remove non-alphanumeric signs, keep only letters, digits and spaces.
     }
 

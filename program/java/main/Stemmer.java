@@ -9,6 +9,6 @@ public class Stemmer {
         stemmer.add(token.toCharArray(), token.length());
         stemmer.stem();
 
-        return token;
+        return stemmer.toString();
     }
 }
