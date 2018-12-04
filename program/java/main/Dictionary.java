@@ -39,7 +39,6 @@ public class Dictionary {
             }
 
             _idfs.put(term, Math.log(N / m));
-//            System.out.println(_idfs);
         }
     }
 }

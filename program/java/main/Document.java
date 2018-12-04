@@ -126,16 +126,16 @@ public class Document {
         double vector = 0.0;
         double doc = 0.0;
         double document = 0.0;
-        double q;
-        double d;
+        double v1;
+        double v2;
 
         int i = 0;
         while (i < query._tfIdfs.size()) {
-            q = query._tfIdfs.get(i);
-            d = this._tfIdfs.get(i);
-            vector += Math.pow(q, 2);
-            document += Math.pow(d, 2);
-            doc += d * q;
+            v1 = query._tfIdfs.get(i);
+            v2 = this._tfIdfs.get(i);
+            vector += Math.pow(v1, 2);
+            document += Math.pow(v2, 2);
+            doc += v2 * v1;
             i++;
         }
 
